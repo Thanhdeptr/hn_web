@@ -1,0 +1,16 @@
+{
+    "name": "ai-news-backend",
+    "version": "1.0.0",
+    "type": "module",
+    "description": "Backend API for AI News using DynamoDB",
+    "main": "server.js",
+    "scripts": {
+      "start": "node server.js"
+    },
+    "dependencies": {
+      "express": "^4.18.2",
+      "cors": "^2.8.5",
+      "@aws-sdk/client-dynamodb": "^3.0.0",
+      "@aws-sdk/lib-dynamodb": "^3.0.0"
+    }
+  }

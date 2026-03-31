@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI NEWS</title>
+    <link
+      rel="icon"
+      type="image/png"
+      href="./image/logotab2.png"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              bg: "#05060f",
+              panel: "#0d1021",
+              panelSoft: "#121632",
+              neonBlue: "#4d7cff",
+              neonViolet: "#8b5cf6",
+              neonSky: "#22d3ee",
+              ink: "#dbe4ff",
+            },
+            boxShadow: {
+              glow: "0 0 25px rgba(77,124,255,.35), 0 0 45px rgba(139,92,246,.22)",
+              card: "0 10px 30px rgba(3,7,18,.6), inset 0 0 0 1px rgba(148,163,184,.18)",
+            },
+            backgroundImage: {
+              aurora:
+                "radial-gradient(circle at 12% 10%, rgba(77,124,255,.35), transparent 36%), radial-gradient(circle at 88% 0%, rgba(139,92,246,.34), transparent 32%), radial-gradient(circle at 50% 100%, rgba(34,211,238,.15), transparent 35%)",
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body class="min-h-screen bg-bg bg-aurora text-ink">
+    <div class="pointer-events-none fixed inset-0 opacity-20">
+      <div class="absolute inset-0 bg-[linear-gradient(rgba(148,163,184,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.08)_1px,transparent_1px)] bg-[size:28px_28px]"></div>
+    </div>
+
+    <div class="relative mx-auto max-w-7xl px-4 pb-14 pt-6 sm:px-6 lg:px-8">
+      <header class="rounded-2xl border border-slate-700/60 bg-panel/80 px-4 py-4 shadow-card backdrop-blur-sm sm:px-6">
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <div class="flex items-center gap-3">
+            <span class="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-neonBlue to-neonViolet shadow-glow">
+              <span class="text-xl font-black text-slate-100">N</span>
+            </span>
+            <div>
+              <p class="text-xs uppercase tracking-[0.25em] text-neonSky">Future Sports Wire</p>
+              <h1 class="text-xl font-semibold">AI Tech News</h1>
+            </div>
+          </div>
+          <nav class="flex flex-wrap gap-3 text-xs uppercase tracking-[0.16em] text-slate-300 sm:text-sm">
+            <a class="rounded-lg border border-slate-600/60 px-3 py-1.5 transition hover:border-neonSky/60 hover:text-neonSky" href="#">Home</a>
+            <a class="rounded-lg border border-slate-600/60 px-3 py-1.5 transition hover:border-neonSky/60 hover:text-neonSky" href="#">Category</a>
+            <a class="rounded-lg border border-slate-600/60 px-3 py-1.5 transition hover:border-neonSky/60 hover:text-neonSky" href="#">Trending</a>
+            <a class="rounded-lg border border-slate-600/60 px-3 py-1.5 transition hover:border-neonSky/60 hover:text-neonSky" href="#">Ranking</a>
+          </nav>
+        </div>
+      </header>
+
+      <main class="mt-6 space-y-6">
+        <section class="grid gap-6 lg:grid-cols-12">
+          <article class="relative overflow-hidden rounded-2xl border border-neonBlue/30 bg-panel p-6 shadow-glow lg:col-span-8">
+            <div class="absolute -left-20 -top-20 h-56 w-56 rounded-full bg-neonBlue/20 blur-3xl"></div>
+            <div class="absolute -right-20 bottom-0 h-52 w-52 rounded-full bg-neonViolet/20 blur-3xl"></div>
+            <p class="text-xs uppercase tracking-[0.2em] text-neonSky">Top Story</p>
+            <h2 id="hero-title" class="mt-3 max-w-xl text-3xl font-black uppercase leading-tight sm:text-5xl">
+              Loading...
+            </h2>
+            <p id="hero-meta" class="mt-5 text-sm text-slate-300">Syncing with live API...</p>
+            <a id="hero-link" target="_blank" rel="noreferrer" class="mt-6 inline-flex rounded-lg bg-gradient-to-r from-neonBlue to-neonViolet px-4 py-2 text-sm font-semibold text-white shadow-glow transition hover:brightness-110">
+              Continue Reading
+            </a>
+          </article>
+
+          <aside id="hero-side" class="space-y-4 lg:col-span-4"></aside>
+        </section>
+
+        <section class="rounded-2xl border border-slate-700/60 bg-panel p-5 shadow-card">
+          <h3 class="text-xl font-semibold">Category</h3>
+          <div class="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+            <div class="rounded-xl border border-neonBlue/30 bg-gradient-to-br from-neonBlue/25 to-transparent p-4 text-center font-bold uppercase tracking-wider">Football</div>
+            <div class="rounded-xl border border-neonViolet/30 bg-gradient-to-br from-neonViolet/25 to-transparent p-4 text-center font-bold uppercase tracking-wider">Basketball</div>
+            <div class="rounded-xl border border-neonBlue/30 bg-gradient-to-br from-neonBlue/25 to-transparent p-4 text-center font-bold uppercase tracking-wider">Motorsport</div>
+            <div class="rounded-xl border border-neonViolet/30 bg-gradient-to-br from-neonViolet/25 to-transparent p-4 text-center font-bold uppercase tracking-wider">Tennis</div>
+          </div>
+        </section>
+
+        <section class="grid gap-6 lg:grid-cols-12">
+          <section class="rounded-2xl border border-slate-700/60 bg-panel p-5 shadow-card lg:col-span-7">
+            <div class="mb-4 flex items-center justify-between">
+              <h3 class="text-xl font-semibold">Trending News</h3>
+              <span id="api-status" class="rounded-full border border-slate-600/70 px-3 py-1 text-xs text-slate-300">Checking API...</span>
+            </div>
+            <div id="trending-list" class="space-y-3"></div>
+          </section>
+
+          <section class="relative overflow-hidden rounded-2xl border border-neonViolet/30 bg-panel p-6 shadow-glow lg:col-span-5">
+            <div class="absolute inset-0 bg-gradient-to-br from-neonBlue/20 via-transparent to-neonViolet/20"></div>
+            <div class="relative">
+              <p class="text-xs uppercase tracking-[0.2em] text-neonSky">Feature</p>
+              <h3 id="feature-title" class="mt-4 text-2xl font-black uppercase leading-tight">Loading feature...</h3>
+              <p id="feature-meta" class="mt-4 text-sm text-slate-300"></p>
+              <a id="feature-link" target="_blank" rel="noreferrer" class="mt-5 inline-flex rounded-lg border border-neonSky/50 px-4 py-2 text-sm font-semibold text-neonSky transition hover:bg-neonSky/10">
+                Open Source
+              </a>
+            </div>
+          </section>
+        </section>
+
+        <section class="rounded-2xl border border-neonBlue/30 bg-panel p-5 shadow-card">
+          <h3 class="text-xl font-semibold">Recent News & Clubs Ranking</h3>
+          <div class="mt-4 grid gap-6 lg:grid-cols-12">
+            <div id="recent-list" class="space-y-3 lg:col-span-7"></div>
+            <div class="rounded-xl border border-slate-700/70 bg-panelSoft p-4 lg:col-span-5">
+              <div class="mb-3 flex items-center justify-between gap-3">
+                <h4 class="text-lg font-semibold">LLM Leaderboard (Popular)</h4>
+                <span id="lb-status" class="rounded-full border border-slate-600/70 px-3 py-1 text-xs text-slate-300">Loading...</span>
+              </div>
+              <ol id="lb-popular" class="space-y-2 text-sm text-slate-200"></ol>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h3 class="mb-4 text-xl font-semibold">Sports Article</h3>
+          <div id="article-grid" class="grid gap-4 md:grid-cols-2 lg:grid-cols-3"></div>
+        </section>
+      </main>
+    </div>
+
+    <script>
+      // Keep news on production API. Only leaderboard can switch to local dev server.
+      const API_URL = "http://13.250.22.15:3000/api/news";
+      const LEADERBOARD_ORIGIN = ["localhost", "127.0.0.1"].includes(window.location.hostname)
+        ? window.location.origin
+        : "http://13.250.22.15:3000";
+      const LEADERBOARD_URL = `${LEADERBOARD_ORIGIN}/api/leaderboard/popular?limit=10`;
+
+      const heroTitle = document.getElementById("hero-title");
+      const heroMeta = document.getElementById("hero-meta");
+      const heroLink = document.getElementById("hero-link");
+      const heroSide = document.getElementById("hero-side");
+      const trendingList = document.getElementById("trending-list");
+      const recentList = document.getElementById("recent-list");
+      const articleGrid = document.getElementById("article-grid");
+      const featureTitle = document.getElementById("feature-title");
+      const featureMeta = document.getElementById("feature-meta");
+      const featureLink = document.getElementById("feature-link");
+      const apiStatus = document.getElementById("api-status");
+      const lbList = document.getElementById("lb-popular");
+      const lbStatus = document.getElementById("lb-status");
+
+      const formatDate = (value) => {
+        try {
+          return new Date(value).toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+          });
+        } catch (error) {
+          return "Unknown date";
+        }
+      };
+
+      const safeTitle = (item) => item?.title || "Untitled news";
+      const safeUrl = (item) => item?.url || "#";
+
+      const makeSmallCard = (item, toneClass) => `
+        <article class="rounded-xl border ${toneClass} bg-panelSoft/95 p-4 shadow-card">
+          <p class="text-[11px] uppercase tracking-[0.18em] text-slate-400">${item.author || "Unknown"}</p>
+          <h4 class="mt-2 text-sm font-semibold leading-snug">${safeTitle(item)}</h4>
+          <p class="mt-2 text-xs text-slate-400">${formatDate(item.created_at)} • ${item.points ?? 0} pts</p>
+          <a href="${safeUrl(item)}" target="_blank" rel="noreferrer" class="mt-3 inline-flex text-xs text-neonSky hover:underline">Read source</a>
+        </article>
+      `;
+
+      const makeListItem = (item, dotClass) => `
+        <article class="rounded-lg border border-slate-700/80 bg-panelSoft/60 p-3">
+          <div class="flex gap-3">
+            <span class="mt-1 inline-block h-2.5 w-2.5 rounded-full ${dotClass}"></span>
+            <div class="min-w-0">
+              <h4 class="line-clamp-2 text-sm font-semibold">${safeTitle(item)}</h4>
+              <p class="mt-1 text-xs text-slate-400">${item.author || "Unknown"} • ${formatDate(item.created_at)} • ${item.points ?? 0} pts</p>
+              <a href="${safeUrl(item)}" target="_blank" rel="noreferrer" class="mt-1 inline-flex text-xs text-neonSky hover:underline">Open article</a>
+            </div>
+          </div>
+        </article>
+      `;
+
+      const makeArticleCard = (item, idx) => `
+        <article class="rounded-xl border border-slate-700/70 bg-panel p-4 shadow-card">
+          <p class="text-[11px] uppercase tracking-[0.18em] ${idx % 2 === 0 ? "text-neonSky" : "text-neonViolet"}">${item.author || "Unknown"}</p>
+          <h4 class="mt-2 line-clamp-3 text-lg font-semibold">${safeTitle(item)}</h4>
+          <p class="mt-2 text-sm text-slate-400">${formatDate(item.created_at)} • ${item.points ?? 0} points</p>
+          <a href="${safeUrl(item)}" target="_blank" rel="noreferrer" class="mt-3 inline-flex rounded-md border border-slate-600 px-3 py-1.5 text-xs font-medium text-slate-200 transition hover:border-neonSky hover:text-neonSky">Read full story</a>
+        </article>
+      `;
+
+      const makeLbRow = (item, idx) => `
+        <li class="flex items-center justify-between gap-3 rounded-lg border border-slate-700/70 bg-panel/40 px-3 py-2">
+          <div class="min-w-0">
+            <p class="truncate text-sm font-semibold">${idx + 1}. ${item.id}</p>
+            <a href="${item.url}" target="_blank" rel="noreferrer" class="mt-0.5 inline-flex text-xs text-neonSky hover:underline">Open on OpenRouter</a>
+          </div>
+          <span class="shrink-0 rounded-md border border-slate-600/70 px-2 py-1 text-xs text-slate-200">
+            ${item.usageTokensWeekly ?? "—"}
+          </span>
+        </li>
+      `;
+
+      async function loadLeaderboard() {
+        try {
+          lbStatus.textContent = "Loading...";
+          const response = await fetch(LEADERBOARD_URL);
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          const payload = await response.json();
+          const data = payload?.data;
+          if (!Array.isArray(data) || data.length === 0) throw new Error("Empty leaderboard");
+          lbList.innerHTML = data.map((item, idx) => makeLbRow(item, idx)).join("");
+          lbStatus.textContent = "Live";
+          lbStatus.className = "rounded-full border border-neonSky/50 bg-neonSky/10 px-3 py-1 text-xs text-neonSky";
+        } catch (error) {
+          lbStatus.textContent = "Error";
+          lbStatus.className = "rounded-full border border-rose-400/40 bg-rose-500/10 px-3 py-1 text-xs text-rose-300";
+          lbList.innerHTML = `
+            <li class="rounded-lg border border-rose-400/40 bg-rose-500/10 p-3 text-xs text-rose-200">
+              Leaderboard request failed: ${error.message}
+            </li>
+          `;
+        }
+      }
+
+      async function loadNews() {
+        try {
+          apiStatus.textContent = "Loading...";
+          const response = await fetch(API_URL);
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+          }
+          const data = await response.json();
+          if (!Array.isArray(data) || data.length === 0) {
+            throw new Error("Empty API payload");
+          }
+
+          const [hero, feature, ...rest] = data;
+          const sideData = rest.slice(0, 2);
+          const trendingData = data.slice(0, 5);
+          const recentData = data.slice(5, 10);
+          const articleData = data.slice(10, 16);
+
+          heroTitle.textContent = safeTitle(hero);
+          heroMeta.textContent = `${hero.author || "Unknown"} • ${formatDate(hero.created_at)} • ${hero.points ?? 0} pts`;
+          heroLink.href = safeUrl(hero);
+
+          featureTitle.textContent = safeTitle(feature);
+          featureMeta.textContent = `${feature.author || "Unknown"} • ${formatDate(feature.created_at)} • ${feature.points ?? 0} pts`;
+          featureLink.href = safeUrl(feature);
+
+          heroSide.innerHTML = sideData
+            .map((item, idx) => makeSmallCard(item, idx === 0 ? "border-neonBlue/40" : "border-neonViolet/40"))
+            .join("");
+
+          trendingList.innerHTML = trendingData
+            .map((item, idx) => makeListItem(item, idx % 2 === 0 ? "bg-neonBlue" : "bg-neonViolet"))
+            .join("");
+
+          recentList.innerHTML = recentData.map((item, idx) => makeListItem(item, idx % 2 === 0 ? "bg-neonSky" : "bg-neonViolet")).join("");
+
+          articleGrid.innerHTML = articleData.map((item, idx) => makeArticleCard(item, idx)).join("");
+          apiStatus.textContent = "API Connected";
+          apiStatus.className = "rounded-full border border-neonSky/50 bg-neonSky/10 px-3 py-1 text-xs text-neonSky";
+        } catch (error) {
+          apiStatus.textContent = "API Error";
+          apiStatus.className = "rounded-full border border-rose-400/40 bg-rose-500/10 px-3 py-1 text-xs text-rose-300";
+
+          const errorText = "Cannot load API data now. Please check API availability.";
+          heroTitle.textContent = errorText;
+          heroMeta.textContent = "Fallback mode is active.";
+          heroLink.href = "#";
+          featureTitle.textContent = "Fallback news mode";
+          featureMeta.textContent = "Live endpoint is unavailable.";
+          featureLink.href = "#";
+
+          const fallback = `
+            <article class="rounded-lg border border-rose-400/40 bg-rose-500/10 p-4 text-sm text-rose-200">
+              API request failed: ${error.message}
+            </article>
+          `;
+          heroSide.innerHTML = fallback;
+          trendingList.innerHTML = fallback;
+          recentList.innerHTML = fallback;
+          articleGrid.innerHTML = fallback;
+        }
+      }
+
+      loadNews();
+      loadLeaderboard();
+    </script>
+  </body>
+</html>

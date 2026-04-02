@@ -18,9 +18,6 @@ const client = new DynamoDBClient({ region: "ap-southeast-1" });
 const ddbDocClient = DynamoDBDocumentClient.from(client);
 
 function parsePopularModelsFromRankingsPage(text, limit = 10) {
-  // The rankings page contains "## LLM Leaderboard" and links like:
-  // https://openrouter.ai/anthropic/claude-sonnet-4.6
-  // Then nearby: "1.04T tokens"
   const startIdx = text.indexOf("## LLM Leaderboard");
   const slice = startIdx >= 0 ? text.slice(startIdx, startIdx + 25000) : text;
 

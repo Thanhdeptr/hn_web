@@ -127,11 +127,8 @@
 
     <script>
       // Keep news on production API. Only leaderboard can switch to local dev server.
-      const API_URL = "http://13.250.22.15:3000/api/news";
-      const LEADERBOARD_ORIGIN = ["localhost", "127.0.0.1"].includes(window.location.hostname)
-        ? window.location.origin
-        : "http://13.250.22.15:3000";
-      const LEADERBOARD_URL = `${LEADERBOARD_ORIGIN}/api/leaderboard/popular?limit=10`;
+      const API_URL = "/api/news";
+      const LEADERBOARD_URL = "/api/leaderboard/popular?limit=10";
 
       const heroTitle = document.getElementById("hero-title");
       const heroMeta = document.getElementById("hero-meta");

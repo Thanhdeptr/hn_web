@@ -1,61 +1,73 @@
-# 🚀 AI Tech News - Full-Stack Cloud-Native Architecture
+# 🚀 Engineering Portfolio: AI-Driven Infrastructure & Observability
 
-A fully automated AI news aggregation system built entirely on **Amazon Web Services (AWS)**. This project leverages the synergy between **Serverless architecture** and **EC2 instances** to optimize performance, security, and automated data scraping workflows.
-
-## 🏗️ System Architecture
-The project implements an **Event-Driven Cloud Architecture**, where scheduled events trigger automated data processing pipelines.
-
-
-
-### **1. Core Layers**
-
-* **Edge Layer:**
-    * **Amazon CloudFront:** Acts as the entry point for HTTPS requests, performing **Path-based routing** to distribute traffic between S3 (Frontend) and EC2 (Backend API).
-* **Automation Layer:**
-    * **Amazon EventBridge:** Functions as the "alarm clock" of the system. It is configured with a **Cron job** to send trigger signals every 1-2 hours.
-    * **AWS Lambda:** A serverless function that reacts to EventBridge signals to perform web scraping from various AI news sources, subsequently storing the data directly into DynamoDB.
-* **Persistence Layer:**
-    * **Amazon DynamoDB:** A NoSQL database storing news articles. It allows Lambda to write data and EC2 to read data simultaneously with ultra-low latency.
-* **Compute & Storage Layer:**
-    * **Amazon S3:** Hosts the static user interface (Static Assets).
-    * **Amazon EC2:** Runs a **Node.js Express** server to serve API queries from end-users.
+A collection of professional projects focusing on **Cloud-Native Architectures**, **AI Integration**, and **System Reliability**. These projects demonstrate the synergy between modern DevOps practices and Large Language Models (LLMs).
 
 ---
 
-## ⚡ Key Features
+## 🏗️ Project 1: AI-Powered Tech News (Event-Driven Cloud Architecture)
 
-* **Full Automation:** By combining **EventBridge** and **Lambda**, news data is refreshed continuously without manual intervention or wasting background resources on the EC2 instance.
-* **Unified Domain:** CloudFront merges S3 and EC2 into a single domain, eliminating **CORS** issues and providing native **HTTPS (SSL)** support.
-* **Cost & Resource Optimization:**
-    * **Lambda** only incurs costs during execution (seconds per scrape).
-    * **EC2 Spot Instances** reduce server costs by up to 90%.
-    * **S3 and DynamoDB** operate within the AWS Free Tier.
-* **Decoupled Architecture:** Separating the scraping task (Lambda) from the user-serving task (EC2) ensures extreme stability; if the Backend API encounters an issue, the scraping workflow remains unaffected.
+A fully automated news aggregation system built on **AWS**, leveraging Serverless computing to provide real-time AI insights with near-zero operational costs.
 
----
+### **Core Architecture**
+* **Edge Layer**: **Amazon CloudFront** acts as a Reverse Proxy and SSL Terminator, using path-based routing to unify Frontend (S3) and Backend (EC2) under a single domain.
+* **Automation Layer**: **Amazon EventBridge** triggers **AWS Lambda** functions on a schedule to scrape global AI news and update the LLM leaderboard.
+* **Persistence Layer**: **Amazon DynamoDB** (NoSQL) provides sub-millisecond data retrieval for high-concurrency access.
+* **Compute Layer**: **Amazon EC2 (Spot Instances)** hosts a Node.js/Express API, utilizing **DuckDNS** for dynamic IP resolution.
 
-## 🔌 Communication Protocols
-The system establishes data "pipelines" through industry-standard protocols:
+### **Demo**
 
-| Connection Flow | Protocol | Description |
-| :--- | :--- | :--- |
-| **User ↔ CloudFront** | **HTTPS (TLS 1.3)** | Secures end-user data. |
-| **EventBridge ↔ Lambda** | **AWS Internal Event** | Triggers the scraper function on a schedule. |
-| **Lambda ↔ DynamoDB** | **HTTPS (AWS SDK)** | Writes new articles into the database. |
-| **EC2 ↔ DynamoDB** | **HTTPS (AWS SDK)** | Retrieves news to serve to users. |
-| **CloudFront ↔ EC2/S3** | **HTTP** | Forwards requests to the respective origins. |
+**Web UI**
+
+![AI Tech News web interface](image/demoUI.png)
+
+**LLM Leaderboard**
+
+![LLM Leaderboard feature (OpenRouter popular models)](image/demolb.png)
 
 ---
 
-## 📊 Automated Data Flow
+## 🤖 Project 2: Kubernetes & Rancher AI Documentation Assistant
 
-### **A. Background Collection Phase**
-1.  **EventBridge** triggers **Lambda** based on a schedule.
-2.  **Lambda** scrapes news from the internet → Normalizes data → Saves to **DynamoDB**.
+A specialized documentation platform that transforms static technical guides into an interactive AI-driven experience.
+
+### **Key Innovations**
+* **AI-Contextual Search**: Integrated **OpenAI API** to provide natural language answers derived specifically from the internal documentation.
+* **Serverless RAG Alternative**: Engineered a custom retrieval mechanism triggered via **OpenAI Function Calling**, optimizing search precision without the overhead of a traditional vector database.
+* **React-to-HTML Rendering**: Implemented a novel process to render dynamic React components into flat HTML, ensuring the AI receives perfectly formatted, up-to-date context.
+* **Modern UI**: Built with **Docusaurus (React)** for a high-performance, public-facing documentation interface.
+
+---
+
+## 📊 Project 3: Network & Service Observability System
+
+A comprehensive monitoring stack designed for deep visibility into infrastructure health and network performance.
+
+### **Technical Stack & Solutions**
+* **Observability Suite**: Deployed and configured **Prometheus, Loki, and Grafana** for a unified "Single Pane of Glass" view of metrics and logs.
+* **Custom Exporters (Python & Go)**: 
+    * Developed high-stability exporters for **iPerf3** and **Ping**.
+    * Implemented a **Queue/Retry mechanism** to handle transient network failures and ensure data integrity during testing.
+* **Automated Incident Response**: Integrated **Alertmanager** with **Slack** for real-time alerting.
+* **AI-Driven Health Reports**: Leveraged LLMs to automate the analysis of raw monitoring data, generating summarized weekly system health and trend reports.
 
 
 
-### **B. User Access Phase**
-1.  The user accesses **CloudFront**.
-2.  **If calling `/api/news`**: CloudFront routes the request to **EC2** → EC2 fetches data from **DynamoDB** → Returns JSON.
-3.  **If accessing the homepage**: CloudFront fetches files from **S3** and returns them to the browser.
+---
+
+## 🔌 Technical Proficiencies & Protocols
+
+| Category | Technologies |
+| :--- | :--- |
+| **Cloud Infrastructure** | AWS (S3, EC2, Lambda, CloudFront, DynamoDB), Kubernetes, Rancher. |
+| **AI & LLM** | OpenAI API, RAG, Function Calling, AI-Driven Analytics. |
+| **Observability** | Prometheus, Grafana, Loki, Alertmanager. |
+| **Networking** | TCP/IP, iPerf3, Ping, DNS (DuckDNS), HTTPS/TLS 1.3. |
+| **Development** | Node.js, Go, Python, React, Tailwind CSS. |
+
+---
+
+## 📈 Data & Workflow Logic
+
+1. **AI Doc Assistant**: User Query → Function Calling → Custom Search Algorithm → Dynamic HTML Context → AI Synthesis → Final Answer.
+2. **Observability**: Custom Exporters → Prometheus/Loki → Grafana Visualization → AI Trend Analysis → Slack Alerting.
+3. **News Automation**: EventBridge (Trigger) → Lambda (Scrape & Store) → DynamoDB ← EC2 (API Serving) ← CloudFront (Edge Delivery).

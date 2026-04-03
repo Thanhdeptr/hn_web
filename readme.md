@@ -20,6 +20,8 @@ The project implements an **Event-Driven Cloud Architecture**, where scheduled e
     * **Amazon S3:** Hosts the static user interface (Static Assets).
     * **Amazon EC2:** Runs a **Node.js Express** server to serve API queries from end-users.
 
+![Web Flow Diagram](/image/web_flowdiagram.png)
+
 ---
 
 ## ⚡ Key Features

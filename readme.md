@@ -14,6 +14,15 @@ A fully automated news aggregation system built on **AWS**, leveraging Serverles
 * **Persistence Layer**: **Amazon DynamoDB** (NoSQL) provides sub-millisecond data retrieval for high-concurrency access.
 * **Compute Layer**: **Amazon EC2 (Spot Instances)** hosts a Node.js/Express API, utilizing **DuckDNS** for dynamic IP resolution.
 
+### **UI Demo**
+
+Trang web hiển thị tin AI:
+
+![AI News UI](image/demoUI.png)
+
+Leaderboard LLM (OpenRouter popularity):
+
+![LLM Leaderboard Demo](image/demolb.png)
 
 
 ---

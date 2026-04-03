@@ -2,6 +2,8 @@ import express from 'express';
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, ScanCommand } from "@aws-sdk/lib-dynamodb";
 import cors from 'cors';
+import https from "https";
+import dns from "dns";
 
 const app = express();
 
@@ -18,22 +20,49 @@ const client = new DynamoDBClient({ region: "ap-southeast-1" });
 const ddbDocClient = DynamoDBDocumentClient.from(client);
 
 function parsePopularModelsFromRankingsPage(text, limit = 10) {
-  const startIdx = text.indexOf("## LLM Leaderboard");
-  const slice = startIdx >= 0 ? text.slice(startIdx, startIdx + 25000) : text;
+  const startIdx = text.indexOf("LLM Leaderboard");
+  const slice = startIdx >= 0 ? text.slice(startIdx) : text;
 
-  const urlRe = /https:\/\/openrouter\.ai\/([a-z0-9_.-]+\/[a-z0-9_.:-]+)/gi;
+  // OpenRouter rankings HTML in production often includes model routes as relative paths:
+  //   /anthropic/claude-4.6-sonnet-20260217
+  // so we parse those rather than expecting absolute https://openrouter.ai/... links.
+  const urlRe = /\/([a-z0-9-]+)\/([a-z0-9_.:-]+)(?=["\s])/gi;
   const tokensRe = /([0-9]+(?:\.[0-9]+)?\s*[TBM])\s*tokens/ig;
 
   const out = [];
   const seen = new Set();
+  const skipProviders = new Set([
+    "css",
+    "chunks",
+    "_next",
+    "static",
+    "images",
+    "fonts",
+    "favicon.ico",
+    "api",
+    "docs",
+    "company",
+    "2000",
+  ]);
+
   let m;
   while ((m = urlRe.exec(slice))) {
-    const id = m[1];
-    if (id.startsWith("apps")) continue;
+    const provider = m[1];
+    const slug = m[2];
+
+    if (skipProviders.has(provider)) continue;
+    if (/^[0-9]+$/.test(provider)) continue;
+    // Model slugs usually contain digits and '-' (or ':' for "free" variants)
+    if (!/\d/.test(slug)) continue;
+    if (!(slug.includes("-") || slug.includes(":"))) continue;
+    if (slug.endsWith(".css") || slug.endsWith(".js") || slug.endsWith(".png") || slug.endsWith(".svg")) continue;
+
+    const id = `${provider}/${slug}`;
+    if (id.startsWith("apps/")) continue;
     if (seen.has(id)) continue;
     seen.add(id);
 
-    const window = slice.slice(m.index, m.index + 600);
+    const window = slice.slice(m.index, m.index + 900);
     const tm = tokensRe.exec(window);
     tokensRe.lastIndex = 0;
     const usageTokensWeekly = tm ? tm[1].replace(/\s+/g, "") : null;
@@ -51,26 +80,52 @@ function parsePopularModelsFromRankingsPage(text, limit = 10) {
 }
 
 async function fetchPopularModels(limit) {
-  if (Date.now() < popularCache.expiresAt && Array.isArray(popularCache.value)) {
+  // If cache is empty, re-fetch (previous parsing attempt could have failed due to HTML changes).
+  if (Date.now() < popularCache.expiresAt && Array.isArray(popularCache.value) && popularCache.value.length > 0) {
     return popularCache.value.slice(0, limit);
   }
 
-  const res = await fetch(OPENROUTER_RANKINGS_URL, {
-    headers: { "User-Agent": "hn_web/leaderboard" },
-  });
-  if (!res.ok) {
-    const body = await res.text().catch(() => "");
-    throw new Error(`OpenRouter rankings failed: HTTP ${res.status} ${body}`.slice(0, 400));
-  }
-  const text = await res.text();
+  const text = await fetchUrlTextIPv4(OPENROUTER_RANKINGS_URL, { "User-Agent": "hn_web/leaderboard" });
   const parsed = parsePopularModelsFromRankingsPage(text, Math.max(10, limit));
 
+  console.log(`[leaderboard] parsed=${Array.isArray(parsed) ? parsed.length : 0}`);
   popularCache = {
     value: parsed,
     expiresAt: Date.now() + CACHE_TTL_MS,
   };
 
   return parsed.slice(0, limit);
+}
+
+function fetchUrlTextIPv4(url, headers = {}) {
+  // Node's global fetch may fail if it resolves IPv6 that is unreachable (ENETUNREACH),
+  // while curl works via IPv4. We force IPv4 by overriding DNS lookup.
+  // This is mainly a robustness improvement; the primary issue here was the HTML parsing regex.
+  return new Promise((resolve, reject) => {
+    const u = new URL(url);
+    const req = https.request(
+      {
+        method: "GET",
+        protocol: u.protocol,
+        hostname: u.hostname,
+        port: u.port || 443,
+        path: `${u.pathname}${u.search}`,
+        headers,
+        lookup: (hostname, opts, cb) => dns.lookup(hostname, { ...opts, family: 4 }, cb),
+      },
+      (res) => {
+        let body = "";
+        res.setEncoding("utf8");
+        res.on("data", (chunk) => (body += chunk));
+        res.on("end", () => {
+          if (res.statusCode && res.statusCode >= 200 && res.statusCode < 300) return resolve(body);
+          return reject(new Error(`OpenRouter rankings failed: HTTP ${res.statusCode || "unknown"} ${body}`.slice(0, 400)));
+        });
+      },
+    );
+    req.on("error", (err) => reject(err));
+    req.end();
+  });
 }
 
 // Endpoint chính: Lấy danh sách tin tức

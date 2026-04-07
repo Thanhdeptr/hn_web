@@ -1,0 +1,1686 @@
+---
+Metadata:
+  AWSToolsMetrics:
+    IaC_Generator: "arn:aws:cloudformation:ap-southeast-1:096085417918:generatedTemplate/c3957aa6-ab9c-4029-a972-159149986f5c"
+Parameters:
+  KeyName:
+    Default: "ai-news-key-v2"
+    Type: "String"
+    Description: "Name of an existing EC2 KeyPair to enable SSH access"
+  LambdaFunctionGetHackerNewsAICodeZipFilexHzzD:
+    NoEcho: "true"
+    Type: "String"
+    Description: "(Node.js and Python) The source code of your Lambda function. If\
+      \ you include your function source inline with this parameter, CFN places it\
+      \ in a file named ``index`` and zips it to create a [deployment package](https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-package.html).\
+      \ This zip file cannot exceed 4MB. For the ``Handler`` property, the first part\
+      \ of the handler identifier must be ``index``. For example, ``index.handler``.\n\
+      \  When you specify source code inline for a Node.js function, the ``index``\
+      \ file that CFN creates uses the extension ``.js``. This means that Node.js\
+      \ treats the file as a CommonJS module.\n When using Node.js 24 or later, Node.js\
+      \ can automatically detect if a ``.js`` file should be treated as CommonJS or\
+      \ as an ES module. To enable auto-detection, add the ``--experimental-detect-module``\
+      \ flag to the ``NODE_OPTIONS`` environment variable. For more information, see\
+      \ [Experimental Node.js features](https://docs.aws.amazon.com//lambda/latest/dg/lambda-nodejs.html#nodejs-experimental-features).\n\
+      \   For JSON, you must escape quotes and special characters such as newline\
+      \ (``\\n``) with a backslash.\n If you specify a function that interacts with\
+      \ an AWS CloudFormation custom resource, you don't have to write your own functions\
+      \ to send responses to the custom resource that invoked the function. AWS CloudFormation\
+      \ provides a response module ([cfn-response](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-lambda-function-code-cfnresponsemodule.html))\
+      \ that simplifies sending responses. See [Using Lambda with CloudFormation](https://docs.aws.amazon.com/lambda/latest/dg/services-cloudformation.html)\
+      \ for details."
+  LambdaFunctionGetHackerNewsAICodeS3ObjectVersionPrpbu:
+    NoEcho: "true"
+    Type: "String"
+    Description: "For versioned objects, the version of the deployment package object\
+      \ to use."
+  LambdaFunctionGetHackerNewsAICodeS3BucketsuQ9H:
+    NoEcho: "true"
+    Type: "String"
+    Description: "An Amazon S3 bucket in the same AWS-Region as your function. The\
+      \ bucket can be in a different AWS-account."
+  LambdaFunctionGetHackerNewsAICodeSourceKMSKeyArnmDjNy:
+    NoEcho: "true"
+    Type: "String"
+    Description: "The ARN of the KMSlong (KMS) customer managed key that's used to\
+      \ encrypt your function's .zip deployment package. If you don't provide a customer\
+      \ managed key, Lambda uses an [owned key](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#aws-owned-cmk)."
+  LambdaFunctionGetHackerNewsAICodeImageUriBB3ic:
+    NoEcho: "true"
+    Type: "String"
+    Description: "URI of a [container image](https://docs.aws.amazon.com/lambda/latest/dg/lambda-images.html)\
+      \ in the Amazon ECR registry."
+  LambdaFunctionGetHackerNewsAICodeS3Key5BV5u:
+    NoEcho: "true"
+    Type: "String"
+    Description: "The Amazon S3 key of the deployment package."
+Resources:
+  CloudFrontCachePolicyU5:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::CloudFront::CachePolicy"
+    DeletionPolicy: "Retain"
+    Properties:
+      CachePolicyConfig:
+        Comment: "Policy with caching enabled. Supports Gzip and Brotli compression."
+        MinTTL: 1
+        MaxTTL: 3.1536E7
+        ParametersInCacheKeyAndForwardedToOrigin:
+          QueryStringsConfig:
+            QueryStringBehavior: "none"
+          EnableAcceptEncodingBrotli: true
+          HeadersConfig:
+            HeaderBehavior: "none"
+          CookiesConfig:
+            CookieBehavior: "none"
+          EnableAcceptEncodingGzip: true
+        DefaultTTL: 86400
+        Name: "Managed-CachingOptimized"
+  LogsLogStream20260406LATEST9a8fd0291301453ab6f4834e141a443b:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/04/06/[$LATEST]9a8fd0291301453ab6f4834e141a443b"
+      LogGroupName: "/aws/lambda/GetHackerNews_AI"
+  CloudFrontCachePolicyM0:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::CloudFront::CachePolicy"
+    DeletionPolicy: "Retain"
+    Properties:
+      CachePolicyConfig:
+        Comment: "Amplify cache policy for static content"
+        MinTTL: 0
+        MaxTTL: 3.1536E7
+        ParametersInCacheKeyAndForwardedToOrigin:
+          QueryStringsConfig:
+            QueryStrings:
+            - "dpl"
+            QueryStringBehavior: "whitelist"
+          EnableAcceptEncodingBrotli: true
+          HeadersConfig:
+            HeaderBehavior: "whitelist"
+            Headers:
+            - "Authorization"
+            - "RSC"
+            - "CloudFront-Viewer-Country"
+            - "X-Amplify-Dpl"
+            - "Host"
+          CookiesConfig:
+            Cookies:
+            - "__dpl"
+            CookieBehavior: "whitelist"
+          EnableAcceptEncodingGzip: true
+        DefaultTTL: 0
+        Name: "Managed-Amplify-StaticContent-V2"
+  EventsRuleRuleDailyAINewsTrigger:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Events::Rule"
+    DeletionPolicy: "Retain"
+    Properties:
+      EventBusName: "default"
+      ScheduleExpression: "cron(0 5,17 * * ? *)"
+      Description: "K?ch ho?t Lambda l?y tin AI m?i s?ng"
+      State: "ENABLED"
+      Targets:
+      - Arn: "arn:aws:lambda:ap-southeast-1:096085417918:function:GetHackerNews_AI"
+        Id: "ls96i5niuv72o7idvr"
+      Id: "Daily_AI_News_Trigger"
+      Tags: []
+      Name: "Daily_AI_News_Trigger"
+  IAMRoleRdsmonitoringrole:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::IAM::Role"
+    DeletionPolicy: "Retain"
+    Properties:
+      Path: "/"
+      ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/service-role/AmazonRDSEnhancedMonitoringRole"
+      MaxSessionDuration: 3600
+      RoleName: "rds-monitoring-role"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Action: "sts:AssumeRole"
+          Effect: "Allow"
+          Principal:
+            Service: "monitoring.rds.amazonaws.com"
+          Sid: ""
+  CloudFrontCachePolicyLU:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::CloudFront::CachePolicy"
+    DeletionPolicy: "Retain"
+    Properties:
+      CachePolicyConfig:
+        Comment: "Default policy when compression is disabled"
+        MinTTL: 1
+        MaxTTL: 3.1536E7
+        ParametersInCacheKeyAndForwardedToOrigin:
+          QueryStringsConfig:
+            QueryStringBehavior: "none"
+          EnableAcceptEncodingBrotli: false
+          HeadersConfig:
+            HeaderBehavior: "none"
+          CookiesConfig:
+            CookieBehavior: "none"
+          EnableAcceptEncodingGzip: false
+        DefaultTTL: 86400
+        Name: "Managed-CachingOptimizedForUncompressedObjects"
+  LogsLogStream20260331LATESTdbae70dbd1dd4881aee4f017a9603c4b:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/03/31/[$LATEST]dbae70dbd1dd4881aee4f017a9603c4b"
+      LogGroupName: "/aws/lambda/GetHackerNews_AI"
+  LambdaFunctionGetHackerNewsAI:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Lambda::Function"
+    DeletionPolicy: "Retain"
+    Properties:
+      MemorySize: 128
+      Description: ""
+      TracingConfig:
+        Mode: "PassThrough"
+      Timeout: 60
+      RuntimeManagementConfig:
+        UpdateRuntimeOn: "Auto"
+      Handler: "index.handler"
+      Code:
+        SourceKMSKeyArn:
+          Ref: "LambdaFunctionGetHackerNewsAICodeSourceKMSKeyArnmDjNy"
+        S3ObjectVersion:
+          Ref: "LambdaFunctionGetHackerNewsAICodeS3ObjectVersionPrpbu"
+        S3Bucket:
+          Ref: "LambdaFunctionGetHackerNewsAICodeS3BucketsuQ9H"
+        ZipFile:
+          Ref: "LambdaFunctionGetHackerNewsAICodeZipFilexHzzD"
+        ImageUri:
+          Ref: "LambdaFunctionGetHackerNewsAICodeImageUriBB3ic"
+        S3Key:
+          Ref: "LambdaFunctionGetHackerNewsAICodeS3Key5BV5u"
+      Role: "arn:aws:iam::096085417918:role/service-role/GetHackerNews_AI-role-bi6vdtri"
+      FileSystemConfigs: []
+      FunctionName: "GetHackerNews_AI"
+      Runtime: "nodejs20.x"
+      PackageType: "Zip"
+      LoggingConfig:
+        LogFormat: "Text"
+        LogGroup: "/aws/lambda/GetHackerNews_AI"
+      RecursiveLoop: "Terminate"
+      EphemeralStorage:
+        Size: 512
+      Architectures:
+      - "x86_64"
+  EC2SubnetNetworkAclAssociation:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::EC2::SubnetNetworkAclAssociation"
+    DeletionPolicy: "Retain"
+    Properties:
+      NetworkAclId: "acl-060adc446ba6317d3"
+      SubnetId: "subnet-06624b7e25472a6df"
+  S3BucketPolicyAinews2026:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::S3::BucketPolicy"
+    DeletionPolicy: "Retain"
+    Properties:
+      Bucket: "ai-news-2026"
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Resource: "arn:aws:s3:::ai-news-2026/*"
+          Action: "s3:GetObject"
+          Effect: "Allow"
+          Principal: "*"
+          Sid: "PublicReadGetObject"
+        - Condition:
+            ArnLike:
+              AWS:SourceArn: "arn:aws:cloudfront::096085417918:distribution/E23XV9EG98GCPO"
+          Resource: "arn:aws:s3:::ai-news-2026/*"
+          Action: "s3:GetObject"
+          Effect: "Allow"
+          Principal:
+            Service: "cloudfront.amazonaws.com"
+          Sid: "AllowCloudFrontServicePrincipal"
+  LogsLogStream20260402LATEST732f8439c43049d3841c9f73f437862f:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/04/02/[$LATEST]732f8439c43049d3841c9f73f437862f"
+      LogGroupName: "/aws/lambda/GetHackerNews_AI"
+  EC2KeyPairAinewskeyv2:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::EC2::KeyPair"
+    DeletionPolicy: "Retain"
+    Properties:
+      KeyName: "ai-news-key-v2"
+      KeyType: "rsa"
+      PublicKeyMaterial: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDa2XS8+irzwZEaZgC7XGWzNpnYmKr3g9dw56vOAu2DPTSuNsuJX/suJgz7kRvfN6nvNEUcjhOqmK9yovmA/F3JHkQJaJFdeJHRChPVeofuE9HzosxbGnafNQJjqDfPp0gED4baXKKyxL+jhI3sW7W4OBos/Wy/xNOaKJkCfHK+HMAv1Z79YtoUJpxgYTUNjNNLCJ+PK5riyaFetM8GzjCGk+6IFu/ZObGsSJTmqx3VQOFuUaPlbW+10co0mKPa/QMStnMt/Eg7F0DJntC3riLHrQU6XfvgD9ChDlvL6W9Kk/ZMmPGBVSxF/LKNrxrRmW7wAbXxB5VRjN/xFblbOuAh\
+        \ ai-news-key-v2\n"
+      Tags: []
+  LogsLogStream20260406LATEST93a8f0a9113f4ff48b2eda3d0fe558d5:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/04/06/[$LATEST]93a8f0a9113f4ff48b2eda3d0fe558d5"
+      LogGroupName: "/aws/lambda/GetHackerNews_AI"
+  CloudFrontOriginRequestPolicyYY:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::CloudFront::OriginRequestPolicy"
+    DeletionPolicy: "Retain"
+    Properties:
+      OriginRequestPolicyConfig:
+        QueryStringsConfig:
+          QueryStringBehavior: "none"
+        Comment: "Policy to forward user-agent and referer headers to origin"
+        HeadersConfig:
+          HeaderBehavior: "whitelist"
+          Headers:
+          - "referer"
+          - "user-agent"
+        CookiesConfig:
+          CookieBehavior: "none"
+        Name: "Managed-UserAgentRefererHeaders"
+  CloudFrontCachePolicyLg:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::CloudFront::CachePolicy"
+    DeletionPolicy: "Retain"
+    Properties:
+      CachePolicyConfig:
+        Comment: "Default Amplify cache policy without cookies"
+        MinTTL: 0
+        MaxTTL: 3.1536E7
+        ParametersInCacheKeyAndForwardedToOrigin:
+          QueryStringsConfig:
+            QueryStringBehavior: "all"
+          EnableAcceptEncodingBrotli: true
+          HeadersConfig:
+            HeaderBehavior: "whitelist"
+            Headers:
+            - "Authorization"
+            - "RSC"
+            - "Accept"
+            - "CloudFront-Viewer-Country"
+            - "X-Amplify-Dpl"
+            - "Host"
+          CookiesConfig:
+            Cookies:
+            - "__dpl"
+            CookieBehavior: "whitelist"
+          EnableAcceptEncodingGzip: true
+        DefaultTTL: 0
+        Name: "Managed-Amplify-DefaultNoCookies-V2"
+  LogsLogStream20260404LATEST2115a168e85e40fdbc2731c32178b002:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/04/04/[$LATEST]2115a168e85e40fdbc2731c32178b002"
+      LogGroupName: "/aws/lambda/GetHackerNews_AI"
+  CloudFrontCachePolicyRu:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::CloudFront::CachePolicy"
+    DeletionPolicy: "Retain"
+    Properties:
+      CachePolicyConfig:
+        Comment: "Policy with caching disabled"
+        MinTTL: 0
+        MaxTTL: 0
+        ParametersInCacheKeyAndForwardedToOrigin:
+          QueryStringsConfig:
+            QueryStringBehavior: "none"
+          EnableAcceptEncodingBrotli: false
+          HeadersConfig:
+            HeaderBehavior: "none"
+          CookiesConfig:
+            CookieBehavior: "none"
+          EnableAcceptEncodingGzip: false
+        DefaultTTL: 0
+        Name: "Managed-CachingDisabled"
+  EC2Instance:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::EC2::Instance"
+    DeletionPolicy: "Retain"
+    Properties:
+      Tenancy: "default"
+      PrivateIpAddress: "172.31.23.131"
+      MetadataOptions:
+        HttpPutResponseHopLimit: 2
+        HttpProtocolIpv6: "disabled"
+        HttpTokens: "optional"
+        InstanceMetadataTags: "disabled"
+        HttpEndpoint: "enabled"
+      UserData: "IyEvYmluL2Jhc2gKIyAxLiBDaOG7nSBjaG8gaOG7hyB0aOG7kW5nIOG7lW4gxJHhu4tuaCB2w6AgY+G6rXAgbmjhuq10CnN1ZG8gYXB0LWdldCB1cGRhdGUgLXkKCiMgMi4gQ8OgaSDEkeG6t3QgTm9kZS5qcyB04burIG5ndeG7k24gY2jDrW5oIHRo4bupYyAoTm9kZXNvdXJjZSkgLSBDw6FjaCBuw6B5IOG7lW4gxJHhu4tuaCBuaOG6pXQKY3VybCAtZnNTTCBodHRwczovL2RlYi5ub2Rlc291cmNlLmNvbS9zZXR1cF8yMC54IHwgc3VkbyAtRSBiYXNoIC0Kc3VkbyBhcHQtZ2V0IGluc3RhbGwgLXkgbm9kZWpzIGdpdAoKIyAzLiBLaeG7g20gdHJhIHhlbSBucG0gxJHDoyBjw7MgY2jGsGEgKExvZyByYSDEkeG7gyBkZWJ1ZykKbm9kZSAtdiA+PiAvdmFyL2xvZy9jbG91ZC1pbml0LW91dHB1dC5sb2cKbnBtIC12ID4+IC92YXIvbG9nL2Nsb3VkLWluaXQtb3V0cHV0LmxvZwoKIyA0LiBDbG9uZSBjb2RlCmNkIC9ob21lL3VidW50dQpzdWRvIHJtIC1yZiBobl93ZWIKZ2l0IGNsb25lIGh0dHBzOi8vZ2l0aHViLmNvbS9UaGFuaGRlcHRyL2huX3dlYi5naXQKCiMgNS4gQ8OgaSDEkeG6t3QgdsOgIENo4bqheSAoRMO5bmcgxJHGsOG7nW5nIGThuqtuIHR1eeG7h3QgxJHhu5FpIGNobyBjaOG6r2MgY2jhuq9uKQpjZCAvaG9tZS91YnVudHUvaG5fd2ViL21haW4Kc3VkbyBucG0gaW5zdGFsbApzdWRvIG5wbSBpbnN0YWxsIC1nIHBtMgoKIyBDaOG6oXkgUE0yIGLhurFuZyB1c2VyIHVidW50dQpzdWRvIC11IHVidW50dSAvdXNyL2Jpbi9wbTIgc3RhcnQgc2VydmVyLmpzIC0tbmFtZSAiYWktbmV3cy1hcGkiCgojIDYuIEPhuq1wIG5o4bqtdCBEdWNrRE5TIChHaeG7ryBuZ3V5w6puIHBo4bqnbiBuw6B5IGPhu6dhIFRow6BuaCkKVE9LRU49IjJiNDZjZmY2LWUyZTMtNDJhMS1hNGY1LTRmZjk2NTVjZDhmZiIKRE9NQUlOPSJhaS1uZXdzLTIwMjYiClBVQkxJQ19JUD0kKGN1cmwgLXMgaHR0cDovLzE2OS4yNTQuMTY5LjI1NC9sYXRlc3QvbWV0YS1kYXRhL3B1YmxpYy1pcHY0KQpjdXJsIC1zICJodHRwczovL3d3dy5kdWNrZG5zLm9yZy91cGRhdGU/ZG9tYWlucz0kRE9NQUlOJnRva2VuPSRUT0tFTiZpcD0kUFVCTElDX0lQIg=="
+      InstanceInitiatedShutdownBehavior: "terminate"
+      BlockDeviceMappings:
+      - Ebs:
+          SnapshotId: "snap-0dc24b8497e5d91c9"
+          VolumeType: "gp3"
+          Iops: 3000
+          VolumeSize: 8
+          Encrypted: false
+          DeleteOnTermination: true
+        DeviceName: "/dev/sda1"
+      PrivateDnsNameOptions:
+        EnableResourceNameDnsARecord: false
+        HostnameType: "ip-name"
+        EnableResourceNameDnsAAAARecord: false
+      SecurityGroupIds:
+      - "sg-094f133201f6a3e55"
+      EbsOptimized: false
+      DisableApiTermination: false
+      SourceDestCheck: true
+      PlacementGroupName: ""
+      NetworkInterfaces:
+      - Ipv6Addresses: []
+        SecondaryPrivateIpAddressCount: 0
+        NetworkInterfaceId: "eni-0eae089804d14554d"
+        DeviceIndex: "0"
+      ImageId: "ami-0e7ff22101b84bcff"
+      InstanceType: "t3.micro"
+      Monitoring: false
+      Tags: []
+      CreditSpecification:
+        CPUCredits: "unlimited"
+  CloudFrontCachePolicyBj:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::CloudFront::CachePolicy"
+    DeletionPolicy: "Retain"
+    Properties:
+      CachePolicyConfig:
+        Comment: "Amplify cache policy for static content"
+        MinTTL: 0
+        MaxTTL: 3.1536E7
+        ParametersInCacheKeyAndForwardedToOrigin:
+          QueryStringsConfig:
+            QueryStringBehavior: "none"
+          EnableAcceptEncodingBrotli: true
+          HeadersConfig:
+            HeaderBehavior: "whitelist"
+            Headers:
+            - "Authorization"
+            - "Host"
+          CookiesConfig:
+            CookieBehavior: "none"
+          EnableAcceptEncodingGzip: true
+        DefaultTTL: 0
+        Name: "Managed-Amplify-StaticContent"
+  CloudFrontCachePolicyL9:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::CloudFront::CachePolicy"
+    DeletionPolicy: "Retain"
+    Properties:
+      CachePolicyConfig:
+        Comment: "Amplify cache policy for image optimization"
+        MinTTL: 0
+        MaxTTL: 3.1536E7
+        ParametersInCacheKeyAndForwardedToOrigin:
+          QueryStringsConfig:
+            QueryStringBehavior: "all"
+          EnableAcceptEncodingBrotli: true
+          HeadersConfig:
+            HeaderBehavior: "whitelist"
+            Headers:
+            - "Authorization"
+            - "Accept"
+            - "Host"
+          CookiesConfig:
+            CookieBehavior: "none"
+          EnableAcceptEncodingGzip: true
+        DefaultTTL: 0
+        Name: "Managed-Amplify-ImageOptimization"
+  IAMUserUserapp:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::IAM::User"
+    DeletionPolicy: "Retain"
+    Properties:
+      Path: "/"
+      UserName: "user-app"
+      LoginProfile:
+        PasswordResetRequired: false
+      Groups:
+      - "Admin_labs"
+      Tags:
+      - Value: "trans-noti-access-key"
+        Key: "REDACTED_ACCESS_KEY_ID_1"
+      - Value: ""
+        Key: "noti-trans"
+  IAMRoleEC2ReadDynamoDBRole:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::IAM::Role"
+    DeletionPolicy: "Retain"
+    Properties:
+      Path: "/"
+      ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/AmazonDynamoDBReadOnlyAccess"
+      - "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
+      MaxSessionDuration: 3600
+      RoleName: "EC2_Read_DynamoDB_Role"
+      Description: "readonly dynamo db role"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Action: "sts:AssumeRole"
+          Effect: "Allow"
+          Principal:
+            Service: "ec2.amazonaws.com"
+  EC2InternetGateway:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::EC2::InternetGateway"
+    DeletionPolicy: "Retain"
+    Properties:
+      Tags: []
+  EC2NetworkAcl:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::EC2::NetworkAcl"
+    DeletionPolicy: "Retain"
+    Properties:
+      VpcId: "vpc-0f01d924b3e8d33b2"
+      Tags: []
+  EC2SubnetNetworkAclAssociationUB:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::EC2::SubnetNetworkAclAssociation"
+    DeletionPolicy: "Retain"
+    Properties:
+      NetworkAclId: "acl-060adc446ba6317d3"
+      SubnetId: "subnet-04816f1ff254b8482"
+  CloudFrontCachePolicyU1:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::CloudFront::CachePolicy"
+    DeletionPolicy: "Retain"
+    Properties:
+      CachePolicyConfig:
+        Comment: "Default Amplify cache policy"
+        MinTTL: 0
+        MaxTTL: 3.1536E7
+        ParametersInCacheKeyAndForwardedToOrigin:
+          QueryStringsConfig:
+            QueryStringBehavior: "all"
+          EnableAcceptEncodingBrotli: true
+          HeadersConfig:
+            HeaderBehavior: "whitelist"
+            Headers:
+            - "Authorization"
+            - "Accept"
+            - "CloudFront-Viewer-Country"
+            - "Host"
+          CookiesConfig:
+            CookieBehavior: "all"
+          EnableAcceptEncodingGzip: true
+        DefaultTTL: 0
+        Name: "Managed-Amplify-Default"
+  LogsLogStream20260404LATESTf5903574446f40cbbf6dcf88eb7a0211:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/04/04/[$LATEST]f5903574446f40cbbf6dcf88eb7a0211"
+      LogGroupName: "/aws/lambda/GetHackerNews_AI"
+  CloudFrontOriginRequestPolicyJR:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::CloudFront::OriginRequestPolicy"
+    DeletionPolicy: "Retain"
+    Properties:
+      OriginRequestPolicyConfig:
+        QueryStringsConfig:
+          QueryStringBehavior: "all"
+        Comment: "Policy for Elemental MediaTailor Origin"
+        HeadersConfig:
+          HeaderBehavior: "whitelist"
+          Headers:
+          - "origin"
+          - "access-control-request-headers"
+          - "x-forwarded-for"
+          - "access-control-request-method"
+          - "user-agent"
+        CookiesConfig:
+          CookieBehavior: "none"
+        Name: "Managed-Elemental-MediaTailor-PersonalizedManifests"
+  LogsLogStream20260331LATESTeb50b3e166ac4597936206f68415fd6f:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/03/31/[$LATEST]eb50b3e166ac4597936206f68415fd6f"
+      LogGroupName: "/aws/lambda/GetHackerNews_AI"
+  LogsLogStream20260325LATESTaf2952e722ae49f882e11bec5e935596:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/03/25/[$LATEST]af2952e722ae49f882e11bec5e935596"
+      LogGroupName: "/aws/lambda/GetHackerNews_AI"
+  CloudFrontOriginRequestPolicyXH:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::CloudFront::OriginRequestPolicy"
+    DeletionPolicy: "Retain"
+    Properties:
+      OriginRequestPolicyConfig:
+        QueryStringsConfig:
+          QueryStringBehavior: "all"
+        Comment: "Policy to forward all parameters in viewer requests except for the\
+          \ Host header"
+        HeadersConfig:
+          HeaderBehavior: "allExcept"
+          Headers:
+          - "host"
+        CookiesConfig:
+          CookieBehavior: "all"
+        Name: "Managed-AllViewerExceptHostHeader"
+  CloudFrontOriginRequestPolicyPA:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::CloudFront::OriginRequestPolicy"
+    DeletionPolicy: "Retain"
+    Properties:
+      OriginRequestPolicyConfig:
+        QueryStringsConfig:
+          QueryStringBehavior: "none"
+        Comment: "Policy for an origin to forward the Host header only"
+        HeadersConfig:
+          HeaderBehavior: "whitelist"
+          Headers:
+          - "host"
+        CookiesConfig:
+          CookieBehavior: "none"
+        Name: "Managed-HostHeaderOnly"
+  EC2Subnet:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::EC2::Subnet"
+    DeletionPolicy: "Retain"
+    Properties:
+      MapPublicIpOnLaunch: true
+      EnableDns64: false
+      VpcId: "vpc-0f01d924b3e8d33b2"
+      AvailabilityZoneId: "apse1-az2"
+      PrivateDnsNameOptionsOnLaunch:
+        EnableResourceNameDnsARecord: false
+        HostnameType: "ip-name"
+        EnableResourceNameDnsAAAARecord: false
+      AvailabilityZone: "ap-southeast-1a"
+      CidrBlock: "172.31.32.0/20"
+      Ipv6Native: false
+      Tags: []
+  CloudFrontCachePolicyO8:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::CloudFront::CachePolicy"
+    DeletionPolicy: "Retain"
+    Properties:
+      CachePolicyConfig:
+        Comment: "Default Amplify cache policy"
+        MinTTL: 0
+        MaxTTL: 3.1536E7
+        ParametersInCacheKeyAndForwardedToOrigin:
+          QueryStringsConfig:
+            QueryStringBehavior: "all"
+          EnableAcceptEncodingBrotli: true
+          HeadersConfig:
+            HeaderBehavior: "whitelist"
+            Headers:
+            - "Authorization"
+            - "RSC"
+            - "Accept"
+            - "CloudFront-Viewer-Country"
+            - "X-Amplify-Dpl"
+            - "Host"
+          CookiesConfig:
+            CookieBehavior: "all"
+          EnableAcceptEncodingGzip: true
+        DefaultTTL: 0
+        Name: "Managed-Amplify-Default-V2"
+  EC2SecurityGroup:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::EC2::SecurityGroup"
+    DeletionPolicy: "Retain"
+    Properties:
+      GroupDescription: "launch-wizard-1 created 2026-03-25T16:14:06.486Z"
+      GroupName: "launch-wizard-1"
+      VpcId: "vpc-0f01d924b3e8d33b2"
+      SecurityGroupIngress:
+      - CidrIp: "0.0.0.0/0"
+        IpProtocol: "tcp"
+        FromPort: 80
+        ToPort: 80
+      - CidrIp: "0.0.0.0/0"
+        IpProtocol: "tcp"
+        FromPort: 22
+        ToPort: 22
+      - CidrIp: "0.0.0.0/0"
+        IpProtocol: "tcp"
+        FromPort: 3000
+        ToPort: 3000
+      SecurityGroupEgress:
+      - CidrIp: "0.0.0.0/0"
+        IpProtocol: "-1"
+        FromPort: -1
+        ToPort: -1
+  IAMRoleAWSServiceRoleForResourceExplorer:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::IAM::Role"
+    DeletionPolicy: "Retain"
+    Properties:
+      Path: "/aws-service-role/resource-explorer-2.amazonaws.com/"
+      ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/aws-service-role/AWSResourceExplorerServiceRolePolicy"
+      MaxSessionDuration: 3600
+      RoleName: "AWSServiceRoleForResourceExplorer"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Action: "sts:AssumeRole"
+          Effect: "Allow"
+          Principal:
+            Service: "resource-explorer-2.amazonaws.com"
+  LogsLogStream20260329LATESTaf0220fb06794e608b9312695a3da7ec:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/03/29/[$LATEST]af0220fb06794e608b9312695a3da7ec"
+      LogGroupName: "/aws/lambda/GetHackerNews_AI"
+  LogsLogStream20260328LATESTc097d93a81404e18b8d54dedc479f2ec:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/03/28/[$LATEST]c097d93a81404e18b8d54dedc479f2ec"
+      LogGroupName: "/aws/lambda/GetHackerNews_AI"
+  CloudFrontCachePolicyOK:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::CloudFront::CachePolicy"
+    DeletionPolicy: "Retain"
+    Properties:
+      CachePolicyConfig:
+        Comment: "Default Amplify cache policy without cookies"
+        MinTTL: 0
+        MaxTTL: 3.1536E7
+        ParametersInCacheKeyAndForwardedToOrigin:
+          QueryStringsConfig:
+            QueryStringBehavior: "all"
+          EnableAcceptEncodingBrotli: true
+          HeadersConfig:
+            HeaderBehavior: "whitelist"
+            Headers:
+            - "Authorization"
+            - "Accept"
+            - "CloudFront-Viewer-Country"
+            - "Host"
+          CookiesConfig:
+            CookieBehavior: "none"
+          EnableAcceptEncodingGzip: true
+        DefaultTTL: 0
+        Name: "Managed-Amplify-DefaultNoCookies"
+  LogsLogStream20260401LATEST37fe5679777c490f95e98e4769373f6a:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/04/01/[$LATEST]37fe5679777c490f95e98e4769373f6a"
+      LogGroupName: "/aws/lambda/GetHackerNews_AI"
+  LogsLogStream20260326LATESTeb39f45799ea42249d5da6cf1c5858a8:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/03/26/[$LATEST]eb39f45799ea42249d5da6cf1c5858a8"
+      LogGroupName: "/aws/lambda/GetHackerNews_AI"
+  CloudFrontCachePolicyLn:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::CloudFront::CachePolicy"
+    DeletionPolicy: "Retain"
+    Properties:
+      CachePolicyConfig:
+        Comment: "Amplify cache policy for image optimization"
+        MinTTL: 0
+        MaxTTL: 3.1536E7
+        ParametersInCacheKeyAndForwardedToOrigin:
+          QueryStringsConfig:
+            QueryStringBehavior: "all"
+          EnableAcceptEncodingBrotli: true
+          HeadersConfig:
+            HeaderBehavior: "whitelist"
+            Headers:
+            - "Authorization"
+            - "RSC"
+            - "Accept"
+            - "CloudFront-Viewer-Country"
+            - "X-Amplify-Dpl"
+            - "Host"
+          CookiesConfig:
+            Cookies:
+            - "__dpl"
+            CookieBehavior: "whitelist"
+          EnableAcceptEncodingGzip: true
+        DefaultTTL: 0
+        Name: "Managed-Amplify-ImageOptimization-V2"
+  EC2SubnetY2:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::EC2::Subnet"
+    DeletionPolicy: "Retain"
+    Properties:
+      MapPublicIpOnLaunch: true
+      EnableDns64: false
+      VpcId: "vpc-0f01d924b3e8d33b2"
+      AvailabilityZoneId: "apse1-az3"
+      PrivateDnsNameOptionsOnLaunch:
+        EnableResourceNameDnsARecord: false
+        HostnameType: "ip-name"
+        EnableResourceNameDnsAAAARecord: false
+      AvailabilityZone: "ap-southeast-1c"
+      CidrBlock: "172.31.0.0/20"
+      Ipv6Native: false
+      Tags: []
+  IAMRoleAWSServiceRoleForEC2Spot:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::IAM::Role"
+    DeletionPolicy: "Retain"
+    Properties:
+      Path: "/aws-service-role/spot.amazonaws.com/"
+      ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/aws-service-role/AWSEC2SpotServiceRolePolicy"
+      MaxSessionDuration: 3600
+      RoleName: "AWSServiceRoleForEC2Spot"
+      Description: "Default EC2 Spot Service Linked Role"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Action: "sts:AssumeRole"
+          Effect: "Allow"
+          Principal:
+            Service: "spot.amazonaws.com"
+  CloudFrontOriginRequestPolicy:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::CloudFront::OriginRequestPolicy"
+    DeletionPolicy: "Retain"
+    Properties:
+      OriginRequestPolicyConfig:
+        QueryStringsConfig:
+          QueryStringBehavior: "all"
+        Comment: "Policy to forward all parameters in viewer requests"
+        HeadersConfig:
+          HeaderBehavior: "allViewer"
+        CookiesConfig:
+          CookieBehavior: "all"
+        Name: "Managed-AllViewer"
+  IAMInstanceProfileEC2ReadDynamoDBRole:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::IAM::InstanceProfile"
+    DeletionPolicy: "Retain"
+    Properties:
+      Path: "/"
+      Roles:
+      - "EC2_Read_DynamoDB_Role"
+      InstanceProfileName: "EC2_Read_DynamoDB_Role"
+  CloudFrontCachePolicyMZ:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::CloudFront::CachePolicy"
+    DeletionPolicy: "Retain"
+    Properties:
+      CachePolicyConfig:
+        Comment: "Policy for origins that return Cache-Control headers and serve different\
+          \ content based on values present in the query string."
+        MinTTL: 0
+        MaxTTL: 3.1536E7
+        ParametersInCacheKeyAndForwardedToOrigin:
+          QueryStringsConfig:
+            QueryStringBehavior: "all"
+          EnableAcceptEncodingBrotli: true
+          HeadersConfig:
+            HeaderBehavior: "whitelist"
+            Headers:
+            - "x-method-override"
+            - "origin"
+            - "host"
+            - "x-http-method"
+            - "x-http-method-override"
+          CookiesConfig:
+            CookieBehavior: "all"
+          EnableAcceptEncodingGzip: true
+        DefaultTTL: 0
+        Name: "UseOriginCacheControlHeaders-QueryStrings"
+  LogsLogStream20260405LATEST867c6181604b4b03bfabfaf38657368a:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/04/05/[$LATEST]867c6181604b4b03bfabfaf38657368a"
+      LogGroupName: "/aws/lambda/GetHackerNews_AI"
+  LogsLogStream20260326LATESTe41f8eb7d27a4553a5f7ab55c33955ca:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/03/26/[$LATEST]e41f8eb7d27a4553a5f7ab55c33955ca"
+      LogGroupName: "/aws/lambda/GetHackerNews_AI"
+  EC2VPC:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::EC2::VPC"
+    DeletionPolicy: "Retain"
+    Properties:
+      CidrBlock: "172.31.0.0/16"
+      EnableDnsSupport: true
+      InstanceTenancy: "default"
+      EnableDnsHostnames: true
+      Tags: []
+  EC2RouteTable:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::EC2::RouteTable"
+    DeletionPolicy: "Retain"
+    Properties:
+      VpcId: "vpc-0f01d924b3e8d33b2"
+  IAMManagedPolicyPolicyserviceroleAWSLambdaBasicExecutionRoleac3e9760d3ae40e98745e677a264f261:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::IAM::ManagedPolicy"
+    DeletionPolicy: "Retain"
+    Properties:
+      ManagedPolicyName: "AWSLambdaBasicExecutionRole-ac3e9760-d3ae-40e9-8745-e677a264f261"
+      Path: "/service-role/"
+      Description: ""
+      Groups: []
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Resource: "arn:aws:logs:ap-southeast-1:096085417918:*"
+          Action: "logs:CreateLogGroup"
+          Effect: "Allow"
+        - Resource:
+          - "arn:aws:logs:ap-southeast-1:096085417918:log-group:/aws/lambda/GetHackerNews_AI:*"
+          Action:
+          - "logs:CreateLogStream"
+          - "logs:PutLogEvents"
+          Effect: "Allow"
+      Roles:
+      - "GetHackerNews_AI-role-bi6vdtri"
+      Users: []
+  S3BucketAinews2026:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::S3::Bucket"
+    DeletionPolicy: "Retain"
+    Properties:
+      AbacStatus: "Disabled"
+      WebsiteConfiguration:
+        IndexDocument: "index.html"
+      PublicAccessBlockConfiguration:
+        RestrictPublicBuckets: false
+        IgnorePublicAcls: false
+        BlockPublicPolicy: false
+        BlockPublicAcls: false
+      BucketName: "ai-news-2026"
+      OwnershipControls:
+        Rules:
+        - ObjectOwnership: "BucketOwnerEnforced"
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+        - BucketKeyEnabled: true
+          ServerSideEncryptionByDefault:
+            SSEAlgorithm: "AES256"
+  CloudFrontOriginAccessControl:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::CloudFront::OriginAccessControl"
+    DeletionPolicy: "Retain"
+    Properties:
+      OriginAccessControlConfig:
+        SigningBehavior: "always"
+        Description: "Created by CloudFront"
+        SigningProtocol: "sigv4"
+        OriginAccessControlOriginType: "s3"
+        Name: "oac-ai-news-2026.s3.ap-southeast-1.amazonaws.com-mnh81mnfx2s"
+  LogsLogStream20260325LATEST694f4f37e6a74c568931ecd8ad66ba59:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/03/25/[$LATEST]694f4f37e6a74c568931ecd8ad66ba59"
+      LogGroupName: "/aws/lambda/GetHackerNews_AI"
+  IAMUserUsersDevopsLabs:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::IAM::User"
+    DeletionPolicy: "Retain"
+    Properties:
+      Path: "/"
+      UserName: "Users_Devops_Labs"
+      LoginProfile:
+        PasswordResetRequired: false
+      Groups:
+      - "Admin_labs"
+      Tags:
+      - Value: "devops_labs_accesskey"
+        Key: "REDACTED_ACCESS_KEY_ID_2"
+  LogsLogStream20260329LATEST9192fc6c700a4e45859dee7478f172bb:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/03/29/[$LATEST]9192fc6c700a4e45859dee7478f172bb"
+      LogGroupName: "/aws/lambda/GetHackerNews_AI"
+  IAMInstanceProfileDemoRoleEC2:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::IAM::InstanceProfile"
+    DeletionPolicy: "Retain"
+    Properties:
+      Path: "/"
+      Roles:
+      - "demoRoleEC2"
+      InstanceProfileName: "demoRoleEC2"
+  EventsEventBusDefault:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Events::EventBus"
+    DeletionPolicy: "Retain"
+    Properties:
+      Tags: []
+      Name: "default"
+  CloudFrontCachePolicyYC:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::CloudFront::CachePolicy"
+    DeletionPolicy: "Retain"
+    Properties:
+      CachePolicyConfig:
+        Comment: "Policy for Amplify Origin"
+        MinTTL: 2
+        MaxTTL: 600
+        ParametersInCacheKeyAndForwardedToOrigin:
+          QueryStringsConfig:
+            QueryStringBehavior: "all"
+          EnableAcceptEncodingBrotli: true
+          HeadersConfig:
+            HeaderBehavior: "whitelist"
+            Headers:
+            - "Authorization"
+            - "CloudFront-Viewer-Country"
+            - "Host"
+          CookiesConfig:
+            CookieBehavior: "all"
+          EnableAcceptEncodingGzip: true
+        DefaultTTL: 2
+        Name: "Managed-Amplify"
+  LogsLogStream20260401LATESTf02db296a7954a79ba9ca0eaa9c65b72:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/04/01/[$LATEST]f02db296a7954a79ba9ca0eaa9c65b72"
+      LogGroupName: "/aws/lambda/GetHackerNews_AI"
+  LogsLogStream20260402LATEST66d4df0a3c4b4db0b04c7097da11947f:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/04/02/[$LATEST]66d4df0a3c4b4db0b04c7097da11947f"
+      LogGroupName: "/aws/lambda/GetHackerNews_AI"
+  XRayGroupGroupDefault:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::XRay::Group"
+    DeletionPolicy: "Retain"
+    Properties:
+      GroupName: "Default"
+      InsightsConfiguration:
+        InsightsEnabled: false
+        NotificationsEnabled: false
+      Tags: []
+  LogsLogStream20260325LATEST5d07644aab95410cb50a0307a8f30669:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/03/25/[$LATEST]5d07644aab95410cb50a0307a8f30669"
+      LogGroupName: "/aws/lambda/GetHackerNews_AI"
+  CloudFrontCachePolicyQE:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::CloudFront::CachePolicy"
+    DeletionPolicy: "Retain"
+    Properties:
+      CachePolicyConfig:
+        Comment: "Policy for origins that return Cache-Control headers. Query strings\
+          \ are not included in the cache key."
+        MinTTL: 0
+        MaxTTL: 3.1536E7
+        ParametersInCacheKeyAndForwardedToOrigin:
+          QueryStringsConfig:
+            QueryStringBehavior: "none"
+          EnableAcceptEncodingBrotli: true
+          HeadersConfig:
+            HeaderBehavior: "whitelist"
+            Headers:
+            - "x-method-override"
+            - "origin"
+            - "host"
+            - "x-http-method"
+            - "x-http-method-override"
+          CookiesConfig:
+            CookieBehavior: "all"
+          EnableAcceptEncodingGzip: true
+        DefaultTTL: 0
+        Name: "UseOriginCacheControlHeaders"
+  EC2RouteWI:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::EC2::Route"
+    DeletionPolicy: "Retain"
+    Properties:
+      RouteTableId: "rtb-00ef963080f4dd80a"
+      DestinationCidrBlock: "172.31.0.0/16"
+      GatewayId: "local"
+      VpcEndpointId: "local"
+  EC2DHCPOptions:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::EC2::DHCPOptions"
+    DeletionPolicy: "Retain"
+    Properties:
+      DomainName: "ap-southeast-1.compute.internal"
+      DomainNameServers:
+      - "AmazonProvidedDNS"
+      Tags: []
+  EC2Route:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::EC2::Route"
+    DeletionPolicy: "Retain"
+    Properties:
+      RouteTableId: "rtb-00ef963080f4dd80a"
+      DestinationCidrBlock: "0.0.0.0/0"
+      GatewayId: "igw-0a331fc5c9aa61825"
+      VpcEndpointId: "igw-0a331fc5c9aa61825"
+  IAMRoleAWSServiceRoleForTrustedAdvisor:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::IAM::Role"
+    DeletionPolicy: "Retain"
+    Properties:
+      Path: "/aws-service-role/trustedadvisor.amazonaws.com/"
+      ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/aws-service-role/AWSTrustedAdvisorServiceRolePolicy"
+      MaxSessionDuration: 3600
+      RoleName: "AWSServiceRoleForTrustedAdvisor"
+      Description: "Access for the AWS Trusted Advisor Service to help reduce cost,\
+        \ increase performance, and improve security of your AWS environment."
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Action: "sts:AssumeRole"
+          Effect: "Allow"
+          Principal:
+            Service: "trustedadvisor.amazonaws.com"
+  AutoScalingAutoScalingGroupASGAINewsBackend:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::AutoScaling::AutoScalingGroup"
+    DeletionPolicy: "Retain"
+    Properties:
+      LoadBalancerNames: []
+      ServiceLinkedRoleARN: "arn:aws:iam::096085417918:role/aws-service-role/autoscaling.amazonaws.com/AWSServiceRoleForAutoScaling"
+      TargetGroupARNs: []
+      Cooldown: "300"
+      AvailabilityZones:
+      - "ap-southeast-1a"
+      - "ap-southeast-1c"
+      - "ap-southeast-1b"
+      AvailabilityZoneDistribution:
+        CapacityDistributionStrategy: "balanced-best-effort"
+      DesiredCapacity: "1"
+      HealthCheckGracePeriod: 300
+      MetricsCollection: []
+      InstanceLifecyclePolicy:
+        RetentionTriggers:
+          TerminateHookAbandon: "terminate"
+      DeletionProtection: "none"
+      MaxSize: "1"
+      NewInstancesProtectedFromScaleIn: false
+      MinSize: "1"
+      TerminationPolicies:
+      - "Default"
+      LaunchTemplate:
+        Version: "$Default"
+        LaunchTemplateName: "spot_hn"
+        LaunchTemplateId: "lt-04bae69bb11e505a6"
+      AutoScalingGroupName: "ASG-AI-News-Backend"
+      VPCZoneIdentifier:
+      - "subnet-06624b7e25472a6df"
+      - "subnet-04816f1ff254b8482"
+      - "subnet-036593614e8cb2e1f"
+      CapacityReservationSpecification:
+        CapacityReservationPreference: "default"
+      Tags: []
+      HealthCheckType: "EBS"
+  CloudFrontCachePolicy:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::CloudFront::CachePolicy"
+    DeletionPolicy: "Retain"
+    Properties:
+      CachePolicyConfig:
+        Comment: "Policy for Elemental MediaPackage Origin"
+        MinTTL: 0
+        MaxTTL: 3.1536E7
+        ParametersInCacheKeyAndForwardedToOrigin:
+          QueryStringsConfig:
+            QueryStrings:
+            - "aws.manifestfilter"
+            - "start"
+            - "end"
+            - "m"
+            QueryStringBehavior: "whitelist"
+          EnableAcceptEncodingBrotli: false
+          HeadersConfig:
+            HeaderBehavior: "whitelist"
+            Headers:
+            - "origin"
+          CookiesConfig:
+            CookieBehavior: "none"
+          EnableAcceptEncodingGzip: true
+        DefaultTTL: 86400
+        Name: "Managed-Elemental-MediaPackage"
+  LambdaPermissionFunctionGetHackerNewsAI:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Lambda::Permission"
+    DeletionPolicy: "Retain"
+    Properties:
+      FunctionName: "arn:aws:lambda:ap-southeast-1:096085417918:function:GetHackerNews_AI"
+      Action: "lambda:InvokeFunction"
+      SourceArn: "arn:aws:events:ap-southeast-1:096085417918:rule/Daily_AI_News_Trigger"
+      Principal: "events.amazonaws.com"
+  ResourceExplorer2IndexIndexd6500f824b144d11a95a06f766981f9d:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::ResourceExplorer2::Index"
+    DeletionPolicy: "Retain"
+    Properties:
+      Type: "LOCAL"
+      Tags: {}
+  EC2NetworkInterfaceAttachment:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::EC2::NetworkInterfaceAttachment"
+    DeletionPolicy: "Retain"
+    Properties:
+      NetworkInterfaceId: "eni-0eae089804d14554d"
+      InstanceId: "i-05cc84520ba6fa630"
+      DeviceIndex: "0"
+      DeleteOnTermination: true
+  EC2VPCDHCPOptionsAssociation:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::EC2::VPCDHCPOptionsAssociation"
+    DeletionPolicy: "Retain"
+    Properties:
+      VpcId: "vpc-0f01d924b3e8d33b2"
+      DhcpOptionsId: "dopt-0b0cc63b7478321fb"
+  LogsLogStream20260327LATEST0cdf2f175aec4a84975ca4ce08fb7d9f:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/03/27/[$LATEST]0cdf2f175aec4a84975ca4ce08fb7d9f"
+      LogGroupName: "/aws/lambda/GetHackerNews_AI"
+  EC2NetworkInterface:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::EC2::NetworkInterface"
+    DeletionPolicy: "Retain"
+    Properties:
+      SourceDestCheck: true
+      InterfaceType: "interface"
+      Description: ""
+      PrivateIpAddress: "172.31.23.131"
+      SecondaryPrivateIpAddressCount: 0
+      Ipv6PrefixCount: 0
+      Ipv4Prefixes: []
+      Ipv4PrefixCount: 0
+      GroupSet:
+      - "sg-094f133201f6a3e55"
+      Ipv6Prefixes: []
+      SubnetId: "subnet-04816f1ff254b8482"
+      Tags: []
+  DynamoDBTableHackerNewsAI:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::DynamoDB::Table"
+    DeletionPolicy: "Retain"
+    Properties:
+      SSESpecification:
+        SSEEnabled: false
+      TableName: "HackerNews_AI"
+      AttributeDefinitions:
+      - AttributeType: "S"
+        AttributeName: "objectID"
+      ContributorInsightsSpecification:
+        Enabled: false
+      BillingMode: "PAY_PER_REQUEST"
+      PointInTimeRecoverySpecification:
+        PointInTimeRecoveryEnabled: false
+      WarmThroughput:
+        ReadUnitsPerSecond: 12000
+        WriteUnitsPerSecond: 4000
+      KeySchema:
+      - KeyType: "HASH"
+        AttributeName: "objectID"
+      DeletionProtectionEnabled: false
+      TableClass: "STANDARD"
+      Tags: []
+      TimeToLiveSpecification:
+        Enabled: false
+  LogsLogStream20260327LATESTb86a824308a849cd92ec6cfb35c31abb:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/03/27/[$LATEST]b86a824308a849cd92ec6cfb35c31abb"
+      LogGroupName: "/aws/lambda/GetHackerNews_AI"
+  IAMRoleGetHackerNewsAIrolebi6vdtri:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::IAM::Role"
+    DeletionPolicy: "Retain"
+    Properties:
+      Path: "/service-role/"
+      ManagedPolicyArns:
+      - "arn:aws:iam::096085417918:policy/service-role/AWSLambdaBasicExecutionRole-ac3e9760-d3ae-40e9-8745-e677a264f261"
+      - "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess"
+      MaxSessionDuration: 3600
+      RoleName: "GetHackerNews_AI-role-bi6vdtri"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Action: "sts:AssumeRole"
+          Effect: "Allow"
+          Principal:
+            Service: "lambda.amazonaws.com"
+  ResourceExplorer2ViewViewapsoutheast1f56fb5f7a43b438291f5e258cbd0ef3e:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::ResourceExplorer2::View"
+    DeletionPolicy: "Retain"
+    Properties:
+      IncludedProperties:
+      - Name: "tags"
+      Filters:
+        FilterString: ""
+      Scope: "arn:aws:iam::096085417918:root"
+      Tags: {}
+      ViewName: "ap-southeast-1"
+  EC2SubnetNetworkAclAssociationXk:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::EC2::SubnetNetworkAclAssociation"
+    DeletionPolicy: "Retain"
+    Properties:
+      NetworkAclId: "acl-060adc446ba6317d3"
+      SubnetId: "subnet-036593614e8cb2e1f"
+  EC2SecurityGroupPD:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::EC2::SecurityGroup"
+    DeletionPolicy: "Retain"
+    Properties:
+      GroupDescription: "default VPC security group"
+      GroupName: "default"
+      VpcId: "vpc-0f01d924b3e8d33b2"
+      SecurityGroupIngress:
+      - IpProtocol: "-1"
+        FromPort: -1
+        SourceSecurityGroupId: "sg-0ab11b03bc4de1ac4"
+        ToPort: -1
+        SourceSecurityGroupOwnerId: "096085417918"
+      SecurityGroupEgress:
+      - CidrIp: "0.0.0.0/0"
+        IpProtocol: "-1"
+        FromPort: -1
+        ToPort: -1
+  LogsLogStream20260328LATEST0f4a97fc5855468f89f5e76630b03fc7:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/03/28/[$LATEST]0f4a97fc5855468f89f5e76630b03fc7"
+      LogGroupName: "/aws/lambda/GetHackerNews_AI"
+  Route53ResolverResolverRuleAssociation:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Route53Resolver::ResolverRuleAssociation"
+    DeletionPolicy: "Retain"
+    Properties:
+      VPCId: "vpc-0f01d924b3e8d33b2"
+      ResolverRuleId: "rslvr-autodefined-rr-internet-resolver"
+      Name: "System Rule Association"
+  ElastiCacheUser:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::ElastiCache::User"
+    DeletionPolicy: "Retain"
+    Properties:
+      UserName: "default"
+      UserId: "default"
+      Engine: "redis"
+      Tags: []
+  LogsLogStream20260330LATEST36b5ca56838c4a288d5d6472e9e7d989:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/03/30/[$LATEST]36b5ca56838c4a288d5d6472e9e7d989"
+      LogGroupName: "/aws/lambda/GetHackerNews_AI"
+  LogsLogStream20260325LATESTd37954f18138413e85f2ecfbff680dc3:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/03/25/[$LATEST]d37954f18138413e85f2ecfbff680dc3"
+      LogGroupName: "/aws/lambda/GetHackerNews_AI"
+  EC2VolumeAttachment:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::EC2::VolumeAttachment"
+    DeletionPolicy: "Retain"
+    Properties:
+      VolumeId: "vol-01396fce3b1928d46"
+      InstanceId: "i-05cc84520ba6fa630"
+      Device: "/dev/sda1"
+      EbsCardIndex: 0
+  CloudFrontOriginRequestPolicyT1:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::CloudFront::OriginRequestPolicy"
+    DeletionPolicy: "Retain"
+    Properties:
+      OriginRequestPolicyConfig:
+        QueryStringsConfig:
+          QueryStringBehavior: "none"
+        Comment: "Policy for custom origin with CORS"
+        HeadersConfig:
+          HeaderBehavior: "whitelist"
+          Headers:
+          - "origin"
+        CookiesConfig:
+          CookieBehavior: "none"
+        Name: "Managed-CORS-CustomOrigin"
+  LogsLogStream20260325LATEST39ae9e8fbf094c2a82384d7fb5d5995e:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/03/25/[$LATEST]39ae9e8fbf094c2a82384d7fb5d5995e"
+      LogGroupName: "/aws/lambda/GetHackerNews_AI"
+  CloudFrontDistribution:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::CloudFront::Distribution"
+    DeletionPolicy: "Retain"
+    Properties:
+      DistributionConfig:
+        Logging:
+          IncludeCookies: false
+          Bucket: ""
+          Prefix: ""
+        Comment: ""
+        DefaultRootObject: "index.html"
+        Origins:
+        - ConnectionTimeout: 10
+          OriginAccessControlId: ""
+          ConnectionAttempts: 3
+          OriginCustomHeaders: []
+          DomainName: "ai-news-2026.duckdns.org"
+          OriginShield:
+            Enabled: false
+          OriginPath: ""
+          Id: "ec2-Backend"
+          CustomOriginConfig:
+            IpAddressType: "ipv4"
+            OriginReadTimeout: 30
+            HTTPSPort: 443
+            OriginKeepaliveTimeout: 5
+            OriginSSLProtocols:
+            - "SSLv3"
+            - "TLSv1"
+            - "TLSv1.1"
+            - "TLSv1.2"
+            HTTPPort: 3000
+            OriginProtocolPolicy: "http-only"
+        - ConnectionTimeout: 10
+          OriginAccessControlId: "EJUKTOHQ3LUN"
+          ConnectionAttempts: 3
+          OriginCustomHeaders: []
+          DomainName: "ai-news-2026.s3.ap-southeast-1.amazonaws.com"
+          OriginShield:
+            Enabled: false
+          S3OriginConfig:
+            OriginReadTimeout: 30
+            OriginAccessIdentity: ""
+          OriginPath: ""
+          Id: "ai-news-2026.s3.ap-southeast-1.amazonaws.com-mnh6zgcftjq"
+        ViewerCertificate:
+          MinimumProtocolVersion: "TLSv1"
+          SslSupportMethod: "vip"
+          CloudFrontDefaultCertificate: true
+        PriceClass: "PriceClass_All"
+        DefaultCacheBehavior:
+          Compress: true
+          FunctionAssociations: []
+          LambdaFunctionAssociations: []
+          TargetOriginId: "ai-news-2026.s3.ap-southeast-1.amazonaws.com-mnh6zgcftjq"
+          ViewerProtocolPolicy: "redirect-to-https"
+          GrpcConfig:
+            Enabled: false
+          TrustedSigners: []
+          FieldLevelEncryptionId: ""
+          TrustedKeyGroups: []
+          AllowedMethods:
+          - "HEAD"
+          - "GET"
+          CachedMethods:
+          - "HEAD"
+          - "GET"
+          SmoothStreaming: false
+          CachePolicyId: "658327ea-f89d-4fab-a63d-7e88639e58f6"
+        Staging: false
+        CustomErrorResponses: []
+        ContinuousDeploymentPolicyId: ""
+        OriginGroups:
+          Quantity: 0
+          Items: []
+        Enabled: true
+        Aliases: []
+        IPV6Enabled: true
+        WebACLId: ""
+        HttpVersion: "http2"
+        Restrictions:
+          GeoRestriction:
+            Locations: []
+            RestrictionType: "none"
+        CacheBehaviors:
+        - Compress: true
+          FunctionAssociations: []
+          LambdaFunctionAssociations: []
+          TargetOriginId: "ec2-Backend"
+          ViewerProtocolPolicy: "redirect-to-https"
+          GrpcConfig:
+            Enabled: false
+          TrustedSigners: []
+          FieldLevelEncryptionId: ""
+          TrustedKeyGroups: []
+          AllowedMethods:
+          - "HEAD"
+          - "DELETE"
+          - "POST"
+          - "GET"
+          - "OPTIONS"
+          - "PUT"
+          - "PATCH"
+          PathPattern: "/api/*"
+          CachedMethods:
+          - "HEAD"
+          - "GET"
+          SmoothStreaming: false
+          OriginRequestPolicyId: "216adef6-5c7f-47e4-b989-5492eafa07d3"
+          CachePolicyId: "4135ea2d-6df8-44a3-9df3-4b5a84be39ad"
+  EC2Volume:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::EC2::Volume"
+    DeletionPolicy: "Retain"
+    Properties:
+      MultiAttachEnabled: false
+      SnapshotId: "snap-0dc24b8497e5d91c9"
+      VolumeType: "gp3"
+      Encrypted: false
+      Size: 8
+      AutoEnableIO: true
+      AvailabilityZoneId: "apse1-az1"
+      AvailabilityZone: "ap-southeast-1b"
+      Throughput: 125
+      Iops: 3000
+      Tags: []
+  IAMGroupAdminlabs:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::IAM::Group"
+    DeletionPolicy: "Retain"
+    Properties:
+      GroupName: "Admin_labs"
+      Path: "/"
+      ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/AdministratorAccess"
+  LogsLogStream20260403LATEST1876310fd9d14ce5af8ec43281180bee:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/04/03/[$LATEST]1876310fd9d14ce5af8ec43281180bee"
+      LogGroupName: "/aws/lambda/GetHackerNews_AI"
+  CloudFrontOriginRequestPolicyUH:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::CloudFront::OriginRequestPolicy"
+    DeletionPolicy: "Retain"
+    Properties:
+      OriginRequestPolicyConfig:
+        QueryStringsConfig:
+          QueryStringBehavior: "all"
+        Comment: "Policy to forward all parameters in viewer requests and all CloudFront\
+          \ headers as of June 2022"
+        HeadersConfig:
+          HeaderBehavior: "allViewerAndWhitelistCloudFront"
+          Headers:
+          - "CloudFront-Viewer-Time-Zone"
+          - "CloudFront-Viewer-Address"
+          - "CloudFront-Viewer-Country"
+          - "CloudFront-Is-IOS-Viewer"
+          - "CloudFront-Is-Tablet-Viewer"
+          - "CloudFront-Forwarded-Proto"
+          - "CloudFront-Viewer-Country-Name"
+          - "CloudFront-Is-Mobile-Viewer"
+          - "CloudFront-Is-SmartTV-Viewer"
+          - "CloudFront-Viewer-Country-Region"
+          - "CloudFront-Is-Android-Viewer"
+          - "CloudFront-Viewer-Country-Region-Name"
+          - "CloudFront-Viewer-City"
+          - "CloudFront-Viewer-Latitude"
+          - "CloudFront-Viewer-Longitude"
+          - "CloudFront-Viewer-Http-Version"
+          - "CloudFront-Viewer-Postal-Code"
+          - "CloudFront-Viewer-ASN"
+          - "CloudFront-Is-Desktop-Viewer"
+          - "CloudFront-Viewer-Metro-Code"
+          - "CloudFront-Viewer-TLS"
+        CookiesConfig:
+          CookieBehavior: "all"
+        Name: "Managed-AllViewerAndCloudFrontHeaders-2022-06"
+  EC2SubnetTF:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::EC2::Subnet"
+    DeletionPolicy: "Retain"
+    Properties:
+      MapPublicIpOnLaunch: true
+      EnableDns64: false
+      VpcId: "vpc-0f01d924b3e8d33b2"
+      AvailabilityZoneId: "apse1-az1"
+      PrivateDnsNameOptionsOnLaunch:
+        EnableResourceNameDnsARecord: false
+        HostnameType: "ip-name"
+        EnableResourceNameDnsAAAARecord: false
+      AvailabilityZone: "ap-southeast-1b"
+      CidrBlock: "172.31.16.0/20"
+      Ipv6Native: false
+      Tags: []
+  CloudFrontOriginRequestPolicySl:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::CloudFront::OriginRequestPolicy"
+    DeletionPolicy: "Retain"
+    Properties:
+      OriginRequestPolicyConfig:
+        QueryStringsConfig:
+          QueryStringBehavior: "none"
+        Comment: "Policy for S3 origin with CORS"
+        HeadersConfig:
+          HeaderBehavior: "whitelist"
+          Headers:
+          - "origin"
+          - "access-control-request-headers"
+          - "access-control-request-method"
+        CookiesConfig:
+          CookieBehavior: "none"
+        Name: "Managed-CORS-S3Origin"
+  LogsLogStream20260330LATEST41117c48e7e3454a83dea088e69ab546:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/03/30/[$LATEST]41117c48e7e3454a83dea088e69ab546"
+      LogGroupName: "/aws/lambda/GetHackerNews_AI"
+  LogsLogStream20260403LATEST5eafc9ab031f40bdb104f2bb34fce6ff:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/04/03/[$LATEST]5eafc9ab031f40bdb104f2bb34fce6ff"
+      LogGroupName: "/aws/lambda/GetHackerNews_AI"
+  LogsLogGroupawslambdaGetHackerNewsAI:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogGroup"
+    DeletionPolicy: "Retain"
+    Properties:
+      FieldIndexPolicies: []
+      LogGroupClass: "STANDARD"
+      LogGroupName: "/aws/lambda/GetHackerNews_AI"
+      BearerTokenAuthenticationEnabled: false
+      DeletionProtectionEnabled: false
+      DataProtectionPolicy: {}
+  IAMRoleAWSServiceRoleForRDS:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::IAM::Role"
+    DeletionPolicy: "Retain"
+    Properties:
+      Path: "/aws-service-role/rds.amazonaws.com/"
+      ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/aws-service-role/AmazonRDSServiceRolePolicy"
+      MaxSessionDuration: 3600
+      RoleName: "AWSServiceRoleForRDS"
+      Description: "Allows Amazon RDS to manage AWS resources on your behalf"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Action: "sts:AssumeRole"
+          Effect: "Allow"
+          Principal:
+            Service: "rds.amazonaws.com"
+  IAMRoleAWSServiceRoleForSupport:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::IAM::Role"
+    DeletionPolicy: "Retain"
+    Properties:
+      Path: "/aws-service-role/support.amazonaws.com/"
+      ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/aws-service-role/AWSSupportServiceRolePolicy"
+      MaxSessionDuration: 3600
+      RoleName: "AWSServiceRoleForSupport"
+      Description: "Enables resource access for AWS to provide billing, administrative\
+        \ and support services"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Action: "sts:AssumeRole"
+          Effect: "Allow"
+          Principal:
+            Service: "support.amazonaws.com"
+  LogsLogStream20260405LATESTfdbfd1e4894c4704b4731aeba071abc3:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Logs::LogStream"
+    DeletionPolicy: "Retain"
+    Properties:
+      LogStreamName: "2026/04/05/[$LATEST]fdbfd1e4894c4704b4731aeba071abc3"
+      LogGroupName: "/aws/lambda/GetHackerNews_AI"
+  IAMRoleAWSServiceRoleForAutoScaling:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::IAM::Role"
+    DeletionPolicy: "Retain"
+    Properties:
+      Path: "/aws-service-role/autoscaling.amazonaws.com/"
+      ManagedPolicyArns:
+      - "arn:aws:iam::aws:policy/aws-service-role/AutoScalingServiceRolePolicy"
+      MaxSessionDuration: 3600
+      RoleName: "AWSServiceRoleForAutoScaling"
+      Description: "Default Service-Linked Role enables access to AWS Services and\
+        \ Resources used or managed by Auto Scaling"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Action: "sts:AssumeRole"
+          Effect: "Allow"
+          Principal:
+            Service: "autoscaling.amazonaws.com"
